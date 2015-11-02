@@ -1,5 +1,4 @@
 var express = require('express');
-var async = require('async');
 var app = express();
 var Youtube = require('youtube-node');
 var sqlite3 = require('sqlite3').verbose();
@@ -44,14 +43,6 @@ function getYoutube(){
         if (it) {
           db.run("INSERT INTO videos (title, video_id) VALUES (?, ?)", title, video_id);
         }
-        // db.all("SELECT content FROM messages", function(err, rows){
-        //   if (!err) {
-        //     res.render('index', {
-        //       title: 'Miniblog Sample',
-        //       messages: rows,
-        //     });
-        //   }
-        // });
       });
       console.log("+ " + title);
       console.log("| " + url);
@@ -74,11 +65,6 @@ app.get('/', function(request, response) {
       }
     });
   });
-
-  // response.render('index', {
-  // title: 'Gery',
-  // content: hogehoge,
-  // });
 });
 
 app.listen(app.get('port'), function() {
