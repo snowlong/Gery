@@ -97,8 +97,12 @@ app.post('/', function(request, response) {
     console.log('filename: ' + info.filename);
     console.log('size: ' + info.size);
   });
+  video.pipe(fs.createWriteStream('./public/' + video_id + '.mp4'));
+  video.on('end', function () {
+  });
 
-  video.pipe(fs.createWriteStream(video_id + '.mp4'));
+
+
   // exec('youtube-dl ' + url, function(err, stdout, stderr){
   //   if(err) { console.log(err); return;}
   //   if(stdout) console.log(stdout);
@@ -114,6 +118,7 @@ app.post('/', function(request, response) {
           title: 'Gery',
           content: rows,
         });
+
       }
     });
 
