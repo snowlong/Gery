@@ -5,7 +5,13 @@
   <p>猫の人気動画を集めてみました、癒される〜〜</p>
   <ul>
     <% content.forEach(function(item){ %>
-    <li><iframe width="420" height="315" src="https://www.youtube.com/embed/<%= item.video_id %>" frameborder="0" allowfullscreen></iframe></li>
+      <li>
+        <iframe width="420" height="315" src="https://www.youtube.com/embed/<%= item.video_id %>" frameborder="0" allowfullscreen></iframe>
+        <form action="/" method="post">
+          <input type="hidden" name="video_id" value="<%= item.video_id %>">
+          <input type="submit" value="ダウンロード">
+        </form>
+      </li>
     <% }) %>
   </ul>
 
