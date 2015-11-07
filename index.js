@@ -4,10 +4,9 @@ var Youtube = require('youtube-node');
 var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('db.sqlite3');
 var bodyParser = require('body-parser');
-// var http = require('http');
 var fs = require('fs');
-// var exec = require('child_process').exec;
 var youtubedl = require('youtube-dl');
+var config = require('config');
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
@@ -27,7 +26,7 @@ app.get('/get_yt_video', function(request, response){
 function getYoutube(){
   var youtube = new Youtube();
 
-  youtube.setKey('AIzaSyAsG69iBi3YnRgFVpan-EcGlzm_pGyFAMY');
+  youtube.setKey(config.Youtube.API_KEY);
 
   var keyword = 'cat';
   var limit = 5;
@@ -84,31 +83,18 @@ app.post('/', function(request, response) {
 
   youtube.setKey('AIzaSyAsG69iBi3YnRgFVpan-EcGlzm_pGyFAMY');
   var url = "https://www.youtube.com/watch?v=" + video_id;
+  youtubedl.getInfo('http://www.youtube.com/watch?v='  + video_id, function(err, info) {
+    if (err) throw err;
 
-  var video = youtubedl('http://www.youtube.com/watch?v='  + video_id,
-    // Optional arguments passed to youtube-dl.
-    ['--format=18'],
-    // Additional options can be given for calling `child_process.execFile()`.
-    { cwd: __dirname });
-
-  // Will be called when the download starts.
-  video.on('info', function(info) {
-    console.log('Download started');
-    console.log('filename: ' + info.filename);
-    console.log('size: ' + info.size);
+    console.log('id:', info.id);
+    console.log('title:', info.title);
+    console.log('url:', info.url); // download link
+    console.log('thumbnail:', info.thumbnail);
+    console.log('description:', info.description);
+    console.log('filename:', info._filename);
+    console.log('duration:', info.duration);
+    console.log('format_id:', info.format_id);
   });
-  video.pipe(fs.createWriteStream('./public/' + video_id + '.mp4'));
-  video.on('end', function () {
-  });
-
-
-
-  // exec('youtube-dl ' + url, function(err, stdout, stderr){
-  //   if(err) { console.log(err); return;}
-  //   if(stdout) console.log(stdout);
-  //   if(stderr) console.log(stderr);
-  //
-  // });
 
   db.serialize(function(){
 
